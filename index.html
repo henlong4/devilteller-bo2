@@ -1,0 +1,549 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>악마의 바카라 예언자</title>
+    <style>
+        /* General body styles for overall layout */
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            display: flex;
+            flex-direction: column; /* Stacks the main wrapper and disclaimer vertically */
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            background-color: #2c3e50; /* Dark background */
+            color: #ecf0f1; /* Light text */
+            margin: 0;
+            padding: 10px; /* Overall padding for small screens */
+            box-sizing: border-box; /* Include padding in element's total width and height */
+        }
+
+        /* Main wrapper for both systems */
+        .main-wrapper {
+            display: flex;
+            flex-direction: column; /* Stacks systems vertically on small screens */
+            gap: 20px; /* Space between the two systems */
+            width: 100%;
+            max-width: 900px; /* Max width for larger screens */
+            align-items: center; /* Center items horizontally within the wrapper */
+            margin-bottom: 20px; /* Space before disclaimer */
+        }
+
+        /* Common container styles for both apps */
+        .container {
+            background-color: #34495e; /* Card background color */
+            padding: 20px; /* Adjusted padding for mobile */
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+            text-align: center;
+            width: 100%; /* Full width within the main-wrapper */
+            max-width: 500px; /* Max width for individual containers */
+        }
+
+        /* Baccarat Prophet System Specific Styles (converted from Tailwind) */
+        .baccarat-container {
+            background: white; /* Changed background for contrast */
+            border-color: #dc2626; /* red-700 */
+            color: #1f2937; /* gray-900 */
+            padding: 24px; /* p-6 */
+            border-radius: 16px; /* rounded-2xl */
+            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25); /* shadow-2xl */
+        }
+
+        .baccarat-title {
+            font-size: 2.25rem; /* text-3xl sm:text-4xl */
+            font-weight: 800; /* font-extrabold */
+            margin-bottom: 24px; /* mb-6 */
+            color: #dc2626; /* text-red-700 */
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px; /* gap-2 sm:gap-3 */
+        }
+
+        .baccarat-icon {
+            font-size: 3rem; /* text-4xl sm:text-5xl */
+        }
+
+        .baccarat-dice-display {
+            border: 1px solid #d1d5db; /* border border-gray-300 */
+            padding: 16px; /* p-4 */
+            border-radius: 8px; /* rounded-lg */
+            color: #374151; /* text-gray-700 */
+            background-color: #f9fafb; /* bg-gray-50 */
+            margin-bottom: 16px; /* mb-4 */
+            min-height: 3rem; /* min-h-[3rem] */
+            max-height: 6rem; /* max-h-[6rem] */
+            overflow-y: auto; /* overflow-y-auto */
+            box-shadow: inset 0 2px 4px 0 rgba(0, 0, 0, 0.06); /* shadow-inner */
+        }
+
+        .baccarat-dice-label {
+            font-size: 1rem; /* text-base */
+            font-weight: 500; /* font-medium */
+            color: #dc2626; /* text-red-600 */
+            margin-bottom: 4px; /* mb-1 */
+        }
+
+        .baccarat-dice-values {
+            font-size: 1rem; /* text-base */
+            word-break: break-all; /* break-all */
+            color: #374151; /* text-gray-700 */
+        }
+
+        .baccarat-controls {
+            margin-bottom: 24px; /* mb-6 */
+            display: flex;
+            justify-content: center;
+        }
+
+        .baccarat-button {
+            width: 100%; /* w-full */
+            padding: 12px 24px; /* px-4 py-2 sm:px-6 sm:py-3 */
+            font-size: 1.125rem; /* text-lg */
+            font-weight: 700; /* font-bold */
+            border-radius: 12px; /* rounded-xl */
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05); /* shadow-lg */
+            transition: all 0.3s ease; /* transition-all duration-300 */
+            transform: scale(1); /* initial transform for hover */
+            cursor: pointer;
+            border: none;
+        }
+
+        .baccarat-button:hover {
+            transform: scale(1.05); /* hover:scale-105 */
+        }
+
+        .baccarat-button:focus {
+            outline: none;
+            box-shadow: 0 0 0 4px rgba(239, 68, 68, 0.5); /* focus:ring-4 focus:ring-red-300 */
+        }
+
+        .baccarat-button:active {
+            background-color: #991b1b; /* active:bg-red-800 */
+        }
+
+        .baccarat-roll {
+            background-image: linear-gradient(to right, #dc2626, #991b1b); /* bg-gradient-to-r from-red-600 to-red-800 */
+            color: white;
+        }
+
+        .baccarat-result {
+            font-size: 3rem; /* text-5xl sm:text-6xl */
+            font-weight: 800; /* font-extrabold */
+            color: #1f2937; /* text-gray-900 */
+            margin-bottom: 24px; /* mb-6 */
+        }
+
+        .baccarat-result-icon {
+            font-size: 4.375rem; /* text-7xl sm:text-8xl */
+        }
+
+        .baccarat-counts-grid {
+            display: grid;
+            grid-template-columns: 1fr; /* col-span-full */
+            gap: 12px; /* gap-3 */
+            margin-bottom: 24px; /* mb-6 */
+            color: #2d3748; /* text-gray-800 */
+        }
+
+        @media (min-width: 640px) { /* sm breakpoint */
+            .baccarat-counts-grid {
+                grid-template-columns: 1fr 1fr; /* sm:grid-cols-2 */
+            }
+            .baccarat-total-count {
+                grid-column: span 1 / span 1; /* sm:col-span-1 */
+            }
+            .baccarat-summary-counts {
+                grid-column: span 1 / span 1; /* sm:col-span-1 */
+            }
+        }
+
+        .baccarat-total-count,
+        .baccarat-summary-counts {
+            padding: 12px; /* p-3 */
+            background-color: #eff6ff; /* bg-blue-100 for total, bg-gray-100 for summary */
+            border-radius: 8px; /* rounded-lg */
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06); /* shadow-md */
+        }
+
+        .baccarat-total-count {
+            background-color: #eff6ff; /* bg-blue-100 */
+        }
+        .baccarat-summary-counts {
+            background-color: #f9fafb; /* bg-gray-100 */
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .baccarat-label {
+            font-size: 1rem; /* text-base */
+            font-weight: 600; /* font-semibold */
+        }
+
+        .baccarat-value {
+            font-size: 1.5rem; /* text-2xl */
+            font-weight: 700; /* font-bold */
+            color: #1d4ed8; /* text-blue-700 */
+        }
+
+        .baccarat-summary-values {
+            font-size: 1.25rem; /* text-xl */
+            font-weight: 700; /* font-bold */
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 8px 16px; /* gap-x-4 gap-y-2 */
+        }
+
+        .baccarat-banker-count {
+            color: #166534; /* text-green-700 */
+        }
+
+        .baccarat-player-count {
+            color: #6d28d9; /* text-purple-700 */
+        }
+
+        .baccarat-tie-count {
+            color: #b45309; /* text-yellow-700 */
+        }
+
+        .baccarat-action-buttons {
+            margin-top: 24px; /* mt-6 */
+            display: flex;
+            flex-direction: column; /* flex-col */
+            gap: 12px; /* gap-3 sm:gap-4 */
+        }
+
+        @media (min-width: 640px) { /* sm breakpoint */
+            .baccarat-action-buttons {
+                flex-direction: row; /* sm:flex-row */
+            }
+        }
+
+        .baccarat-go-back {
+            border: 2px solid #2563eb; /* border-2 border-blue-600 */
+            color: #2563eb; /* text-blue-600 */
+            background-color: transparent;
+        }
+
+        .baccarat-go-back:disabled {
+            opacity: 0.5; /* opacity-50 */
+            cursor: not-allowed; /* cursor-not-allowed */
+        }
+
+        .baccarat-go-back:not(:disabled):hover {
+            background-color: #e0f2fe; /* hover:bg-blue-100 */
+        }
+
+        .baccarat-go-back:not(:disabled):focus {
+            box-shadow: 0 0 0 4px rgba(96, 165, 250, 0.5); /* focus:ring-4 focus:ring-blue-300 */
+        }
+
+        .baccarat-go-back:not(:disabled):active {
+            background-color: #bfdbfe; /* active:bg-blue-200 */
+        }
+
+        .baccarat-reset {
+            border: 2px solid #dc2626; /* border-2 border-red-600 */
+            color: #dc2626; /* text-red-600 */
+            background-color: transparent;
+        }
+
+        .baccarat-reset:hover {
+            background-color: #fee2e2; /* hover:bg-red-100 */
+        }
+
+        .baccarat-reset:focus {
+            box-shadow: 0 0 0 4px rgba(239, 68, 68, 0.5); /* focus:ring-4 focus:ring-red-300 */
+        }
+
+        .baccarat-reset:active {
+            background-color: #fecaca; /* active:bg-red-200 */
+        }
+
+        /* Disclaimer styles */
+        .disclaimer {
+            color: #bdc3c7;
+            font-size: 0.75em; /* Adjusted for mobile */
+            text-align: center;
+            padding: 8px; /* Adjusted padding */
+            max-width: 500px;
+            margin-top: 15px; /* Adjusted margin */
+        }
+
+        /* Media query for larger screens (e.g., tablets and desktops) */
+        @media (min-width: 768px) { /* md breakpoint for horizontal layout */
+            .main-wrapper {
+                flex-direction: row; /* Arranges systems side-by-side */
+                justify-content: center;
+                align-items: flex-start; /* Align items to the top */
+            }
+
+            .container {
+                padding: 30px; /* Restore original padding for larger screens */
+            }
+
+            .baccarat-title {
+                font-size: 2.5rem; /* For md screens */
+            }
+            .baccarat-icon {
+                font-size: 3.5rem; /* For md screens */
+            }
+            .baccarat-button {
+                width: auto; /* w-auto on larger screens */
+                padding: 12px 24px; /* sm:px-6 sm:py-3 */
+                font-size: 1.125rem; /* sm:text-lg */
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="main-wrapper">
+        <div id="baccarat-prophet-app" class="container baccarat-container">
+            <h1 class="baccarat-title">
+              <span class="baccarat-icon">🧿</span> 악마의 바카라 예언자
+            </h1>
+
+            <div class="baccarat-dice-display">
+                <p class="baccarat-dice-label">🎲 악마의 조언 코드:</p>
+                <p id="baccaratDice" class="baccarat-dice-values"></p>
+            </div>
+
+            <div class="baccarat-controls">
+                <button id="rollDiceButton" class="baccarat-button baccarat-roll">예언하기</button>
+            </div>
+
+            <div id="baccaratResult" class="baccarat-result">
+                <span class="baccarat-result-icon">👉</span>
+                <span id="baccaratResultText"></span>
+            </div>
+
+            <div class="baccarat-counts-grid">
+                <div class="baccarat-total-count">
+                    <div class="baccarat-label">총 예언 횟수:</div>
+                    <div id="baccaratTotalCount" class="baccarat-value">0</div>
+                </div>
+                <div class="baccarat-summary-counts">
+                    <div class="baccarat-label">결과 요약:</div>
+                    <div class="baccarat-summary-values">
+                        <span class="baccarat-banker-count">BANKER: <span id="baccaratBankerCount">0</span> (<span id="baccaratConsecutiveBanker">0</span> 연속)</span>
+                        <span class="baccarat-player-count">PLAYER: <span id="baccaratPlayerCount">0</span> (<span id="baccaratConsecutivePlayer">0</span> 연속)</span>
+                        <span class="baccarat-tie-count">TIE: <span id="baccaratTieCount">0</span> (<span id="baccaratConsecutiveTie">0</span> 연속)</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="baccarat-action-buttons">
+                <button id="baccaratGoBackButton" class="baccarat-button baccarat-go-back">전 단계로</button>
+                <button id="baccaratResetButton" class="baccarat-button baccarat-reset">리셋</button>
+            </div>
+        </div>
+    </div>
+
+    <div class="disclaimer">
+        <p>본 시스템의 이용으로 발생하는 모든 결과에 대한 법적·재정적 책임은 이용자 본인에게 있으며, 운영자는 일체의 법적 책임을 지지 않습니다.</p>
+    </div>
+    
+    <script>
+        // --- 악마의 바카라 예언자 시스템 변수 ---
+        let baccaratDice = [];
+        let baccaratResult = '';
+        let baccaratCount = 0;
+        let baccaratBankerCount = 0;
+        let baccaratPlayerCount = 0;
+        let baccaratTieCount = 0;
+        let baccaratConsecutiveBanker = 0;
+        let baccaratConsecutivePlayer = 0;
+        let baccaratConsecutiveTie = 0;
+        let baccaratLastResult = null;
+        let baccaratBankerBeforeTie = 0;
+        let baccaratPlayerBeforeTie = 0;
+        let baccaratHistory = [];
+
+        // 악마의 바카라 예언자: DOM 요소
+        const baccaratDiceEl = document.getElementById('baccaratDice');
+        const baccaratResultTextEl = document.getElementById('baccaratResultText');
+        const baccaratTotalCountEl = document.getElementById('baccaratTotalCount');
+        const baccaratBankerCountEl = document.getElementById('baccaratBankerCount');
+        const baccaratPlayerCountEl = document.getElementById('baccaratPlayerCount');
+        const baccaratTieCountEl = document.getElementById('baccaratTieCount');
+        const baccaratConsecutiveBankerEl = document.getElementById('baccaratConsecutiveBanker');
+        const baccaratConsecutivePlayerEl = document.getElementById('baccaratConsecutivePlayer');
+        const baccaratConsecutiveTieEl = document.getElementById('baccaratConsecutiveTie');
+        const baccaratRollDiceButton = document.getElementById('rollDiceButton');
+        const baccaratGoBackButton = document.getElementById('baccaratGoBackButton');
+        const baccaratResetButton = document.getElementById('baccaratResetButton');
+
+        // 악마의 바카라 예언자: 숫자가 홀수인지 확인하는 헬퍼 함수
+        function baccaratIsOdd(num) {
+            return num % 2 === 1;
+        }
+
+        // 악마의 바카라 예언자: 숫자가 짝수인지 확인하는 헬퍼 함수
+        function baccaratIsEven(num) {
+            return num % 2 === 0;
+        }
+
+        // 악마의 바카라 예언자: 디스플레이 업데이트 함수
+        function baccaratUpdateDisplay() {
+            if (baccaratDiceEl) baccaratDiceEl.textContent = baccaratDice.length ? baccaratDice.join(', ') : '아직 예언되지 않음';
+            if (baccaratResultTextEl) baccaratResultTextEl.textContent = baccaratResult;
+            if (baccaratTotalCountEl) baccaratTotalCountEl.textContent = baccaratCount;
+            if (baccaratBankerCountEl) baccaratBankerCountEl.textContent = baccaratBankerCount;
+            if (baccaratPlayerCountEl) baccaratPlayerCountEl.textContent = baccaratPlayerCount;
+            if (baccaratTieCountEl) baccaratTieCountEl.textContent = baccaratTieCount;
+            if (baccaratConsecutiveBankerEl) baccaratConsecutiveBankerEl.textContent = baccaratConsecutiveBanker;
+            if (baccaratConsecutivePlayerEl) baccaratConsecutivePlayerEl.textContent = baccaratConsecutivePlayer;
+            if (baccaratConsecutiveTieEl) baccaratConsecutiveTieEl.textContent = baccaratConsecutiveTie;
+            if (baccaratGoBackButton) baccaratGoBackButton.disabled = baccaratHistory.length === 0;
+        }
+
+        // 악마의 바카라 예언자: 현재 상태를 기록에 저장하는 함수
+        function baccaratSaveStateToHistory() {
+            baccaratHistory.push({
+                dice: [...baccaratDice], // 배열을 깊은 복사
+                result: baccaratResult,
+                count: baccaratCount,
+                bankerCount: baccaratBankerCount,
+                playerCount: baccaratPlayerCount,
+                tieCount: baccaratTieCount,
+                consecutiveBanker: baccaratConsecutiveBanker,
+                consecutivePlayer: baccaratConsecutivePlayer,
+                consecutiveTie: baccaratConsecutiveTie,
+                lastResult: baccaratLastResult,
+                bankerBeforeTie: baccaratBankerBeforeTie,
+                playerBeforeTie: baccaratPlayerBeforeTie,
+            });
+        }
+
+        // 악마의 바카라 예언자: 주사위를 굴리고 결과를 결정하는 함수
+        function baccaratRollDice() {
+            // 새로운 주사위 굴림 전에 현재 상태를 기록에 저장
+            baccaratSaveStateToHistory();
+
+            // 1부터 6까지의 30개 무작위 주사위 굴림 생성
+            const newDice = Array.from({ length: 30 }, () => Math.floor(Math.random() * 6) + 1);
+            baccaratDice = newDice; // 전역 변수 업데이트
+
+            // 홀수와 짝수 개수 세기
+            const oddCount = newDice.filter(baccaratIsOdd).length;
+            const evenCount = newDice.filter(baccaratIsEven).length;
+
+            let currentResult = '';
+            // 홀수/짝수 개수 비교를 기반으로 결과 결정
+            if (oddCount > evenCount) {
+                currentResult = 'BANKER';
+            } else if (evenCount > oddCount) {
+                currentResult = 'PLAYER';
+            } else {
+                currentResult = 'TIE';
+            }
+            baccaratResult = currentResult; // 전역 변수 업데이트
+
+            // 총 개수 업데이트
+            if (currentResult === 'BANKER') {
+                baccaratBankerCount++;
+            } else if (currentResult === 'PLAYER') {
+                baccaratPlayerCount++;
+            } else {
+                baccaratTieCount++;
+            }
+            baccaratCount++;
+
+            // --- 연속 개수 업데이트 로직 ---
+            if (currentResult === 'TIE') {
+                baccaratConsecutiveTie++;
+                // 이전 결과가 TIE가 아니었다면, TIE 연속이 시작되기 전의 비-TIE 연속 개수를 저장
+                if (baccaratLastResult !== 'TIE') {
+                    baccaratBankerBeforeTie = baccaratConsecutiveBanker;
+                    baccaratPlayerBeforeTie = baccaratConsecutivePlayer;
+                }
+            } else if (currentResult === 'BANKER') {
+                baccaratConsecutiveTie = 0; // TIE 연속 끊김
+                baccaratConsecutivePlayer = 0; // PLAYER 연속 끊김
+
+                if (baccaratLastResult === 'BANKER') {
+                    baccaratConsecutiveBanker++;
+                } else if (baccaratLastResult === 'TIE') {
+                    // TIE 연속에서 벗어나는 경우, TIE 시작 전의 BANKER 연속 개수에서 이어서 계산
+                    baccaratConsecutiveBanker = baccaratBankerBeforeTie + 1;
+                } else { // lastResult가 PLAYER이거나 null인 경우
+                    baccaratConsecutiveBanker = 1;
+                }
+                baccaratBankerBeforeTie = 0;
+                baccaratPlayerBeforeTie = 0;
+            } else { // currentResult === 'PLAYER'
+                baccaratConsecutiveTie = 0; // TIE 연속 끊김
+                baccaratConsecutiveBanker = 0; // BANKER 연속 끊김
+
+                if (baccaratLastResult === 'PLAYER') {
+                    baccaratConsecutivePlayer++;
+                } else if (baccaratLastResult === 'TIE') {
+                    // TIE 연속에서 벗어나는 경우, TIE 시작 전의 PLAYER 연속 개수에서 이어서 계산
+                    baccaratConsecutivePlayer = baccaratPlayerBeforeTie + 1;
+                } else { // lastResult가 BANKER이거나 null인 경우
+                    baccaratConsecutivePlayer = 1;
+                }
+                baccaratPlayerBeforeTie = 0;
+                baccaratBankerBeforeTie = 0;
+            }
+
+            baccaratLastResult = currentResult; // 다음 굴림을 위해 현재 결과 저장
+            baccaratUpdateDisplay(); // 모든 변경 후 디스플레이 업데이트
+        }
+
+        // 악마의 바카라 예언자: 이전 상태로 돌아가는 함수
+        function baccaratGoBack() {
+            if (baccaratHistory.length > 0) {
+                const previousState = baccaratHistory.pop(); // 마지막 상태 가져오기
+                // 모든 전역 변수를 이전 상태로 복원
+                baccaratDice = previousState.dice;
+                baccaratResult = previousState.result;
+                baccaratCount = previousState.count;
+                baccaratBankerCount = previousState.bankerCount;
+                baccaratPlayerCount = previousState.playerCount;
+                baccaratTieCount = previousState.tieCount;
+                baccaratConsecutiveBanker = previousState.consecutiveBanker;
+                baccaratConsecutivePlayer = previousState.consecutivePlayer;
+                baccaratConsecutiveTie = previousState.consecutiveTie;
+                baccaratLastResult = previousState.lastResult;
+                baccaratBankerBeforeTie = previousState.bankerBeforeTie;
+                baccaratPlayerBeforeTie = previousState.playerBeforeTie;
+
+                baccaratUpdateDisplay(); // 복원 후 디스플레이 업데이트
+            }
+        }
+
+        // 악마의 바카라 예언자: 모든 게임 상태를 리셋하는 함수
+        function baccaratResetGame() {
+            baccaratDice = [];
+            baccaratResult = '';
+            baccaratCount = 0;
+            baccaratBankerCount = 0;
+            baccaratPlayerCount = 0;
+            baccaratTieCount = 0;
+            baccaratConsecutiveBanker = 0;
+            baccaratConsecutivePlayer = 0;
+            baccaratConsecutiveTie = 0;
+            baccaratLastResult = null;
+            baccaratBankerBeforeTie = 0;
+            baccaratPlayerBeforeTie = 0;
+            baccaratHistory = []; // 리셋 시 기록 초기화
+            baccaratUpdateDisplay(); // 리셋 후 디스플레이 업데이트
+        }
+
+        // 악마의 바카라 예언자: 이벤트 리스너 및 초기화
+        document.addEventListener('DOMContentLoaded', () => {
+            if (baccaratRollDiceButton) baccaratRollDiceButton.addEventListener('click', baccaratRollDice);
+            if (baccaratGoBackButton) baccaratGoBackButton.addEventListener('click', baccaratGoBack);
+            if (baccaratResetButton) baccaratResetButton.addEventListener('click', baccaratResetGame);
+            baccaratUpdateDisplay(); // 악마의 바카라 예언자 초기 디스플레이 업데이트
+        });
+    </script>
+</body>
+</html>
